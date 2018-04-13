@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>1.0.0</version>
+    <title>$title$</title>
+    <authors>NbPilot</authors>
+    <owners>NbPilot</owners>
+    <description>$title$</description>
+    <tags>NbPilot</tags>
+  </metadata>
+</package>

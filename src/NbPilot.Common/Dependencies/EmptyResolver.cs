@@ -1,0 +1,39 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace NbPilot.Common.Dependencies
+{
+    internal class EmptyResolver : IDependencyResolver
+    {
+        private static readonly IDependencyResolver _instance = new EmptyResolver();
+
+        private EmptyResolver()
+        {
+        }
+
+        public static IDependencyResolver Instance
+        {
+            get { return _instance; }
+        }
+
+        public IDependencyScope BeginScope()
+        {
+            return this;
+        }
+
+        public void Dispose()
+        {
+        }
+
+        public object GetService(Type serviceType)
+        {
+            return null;
+        }
+
+        public IEnumerable<object> GetServices(Type serviceType)
+        {
+            return Enumerable.Empty<object>();
+        }
+    }
+}
