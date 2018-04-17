@@ -1,12 +1,9 @@
 ﻿# Module System
 
-
 [ref](https://aspnetboilerplate.com/Pages/Documents/Module-System)
 
 Plugin(Umbraco, NopCommerce, ...)
 Module(Orchard, Abp, DNN, ...)
-
-
 
 NbModule:
 
