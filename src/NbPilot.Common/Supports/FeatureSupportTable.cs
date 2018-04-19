@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NbPilot.Common.FeatureSupports
+namespace NbPilot.Common.Supports
 {
     public class FeatureSupportTable
     {

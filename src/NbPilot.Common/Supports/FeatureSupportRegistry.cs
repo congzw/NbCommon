@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NbPilot.Common.AppData.Init;
 
-namespace NbPilot.Common.FeatureSupports
+namespace NbPilot.Common.Supports
 {
     public class FeatureSupportRegistry
     {

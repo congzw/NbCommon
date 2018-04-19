@@ -1,7 +1,6 @@
 ﻿using System;
-using NbPilot.Common.FeatureSupports;
-using NbPilot.Common.Metas;
 using NbPilot.Common.Serialize;
+using NbPilot.Common.Supports;
 
 namespace NbPilot.ConsoleApp.Demos
 {

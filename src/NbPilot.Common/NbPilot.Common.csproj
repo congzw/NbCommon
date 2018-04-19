@@ -61,9 +61,9 @@
     <Compile Include="Collections\TypeList.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
-    <Compile Include="FeatureSupports\FeatureSupportTable.cs" />
+    <Compile Include="Supports\FeatureSupportTable.cs" />
     <Compile Include="GuidHelper.cs" />
-    <Compile Include="FeatureSupports\FeatureSupportRegistry.cs" />
+    <Compile Include="Supports\FeatureSupportRegistry.cs" />
     <Compile Include="Metas\VersionHistoryConfig.cs" />
     <Compile Include="Modules\DependsOnAttribute.cs" />
     <Compile Include="Modules\NbKernelModule.cs" />
@@ -74,6 +74,7 @@
     <Compile Include="Serialize\NbJsonSerializeConfig.cs" />
     <Compile Include="SimpleActivator.cs" />
     <Compile Include="ResolveAsSingleton.cs" />
+    <Compile Include="Supports\ProductSupportContext.cs" />
     <Compile Include="Trees\IHaveRelationCode.cs" />
     <Compile Include="Trees\TreeItemHolder.cs" />
     <Compile Include="VersionHistories\IVersionHistoryConfig.cs" />
