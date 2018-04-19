@@ -1,0 +1,18 @@
+﻿[
+  {
+    "Features": [
+      {
+        "Code": "FeatureA",
+        "SinceVersion": "1.0.0",
+        "DeadVersion": null
+      },
+      {
+        "Code": "FeatureB",
+        "SinceVersion": "1.1.0",
+        "DeadVersion": null
+      }
+    ],
+    "Products": [],
+    "FeatureSupports": []
+  }
+]

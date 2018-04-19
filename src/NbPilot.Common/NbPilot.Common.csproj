@@ -61,7 +61,9 @@
     <Compile Include="Collections\TypeList.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="FeatureSupports\FeatureSupportTable.cs" />
     <Compile Include="GuidHelper.cs" />
+    <Compile Include="FeatureSupports\FeatureSupportRegistry.cs" />
     <Compile Include="Metas\VersionHistoryConfig.cs" />
     <Compile Include="Modules\DependsOnAttribute.cs" />
     <Compile Include="Modules\NbKernelModule.cs" />
@@ -79,6 +81,7 @@
     <Compile Include="VersionHistories\VersionHistoryRegistry.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="AppData\Init\demo.json" />
     <None Include="Modules\readme.md" />
     <None Include="packages.config" />
   </ItemGroup>

@@ -32,6 +32,17 @@ namespace NbPilot.Common.AppData
     /// </summary>
     public class FileDbHelper : IFileDbHelper
     {
+        #region temp
+        
+        //public FileDbHelper()
+        //{
+        //    NbJsonSerialize = new NbJsonSerialize();   
+        //}
+
+        //public INbJsonSerialize NbJsonSerialize { get; set; }
+
+        #endregion
+
         private INbJsonSerialize _nbJsonSerialize;
         public INbJsonSerialize NbJsonSerialize
         {
@@ -53,7 +64,7 @@ namespace NbPilot.Common.AppData
             {
                 return new List<T>();
             }
-            var instance = _nbJsonSerialize.Deserialize<List<T>>(jsonValue);
+            var instance = NbJsonSerialize.Deserialize<List<T>>(jsonValue);
             return instance;
         }
 
@@ -65,7 +76,7 @@ namespace NbPilot.Common.AppData
                 listFix = list;
             }
 
-            var jsonValue = _nbJsonSerialize.Serialize(listFix, new NbJsonSerializeConfig() { Formatting = NbJsonFormatting.Indented });
+            var jsonValue = NbJsonSerialize.Serialize(listFix, new NbJsonSerializeConfig() { Formatting = NbJsonFormatting.Indented });
             SaveFile(path, jsonValue);
         }
 
