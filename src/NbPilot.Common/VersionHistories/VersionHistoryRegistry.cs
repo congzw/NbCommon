@@ -27,12 +27,12 @@ namespace NbPilot.Common.VersionHistories
                 VersionHistories = new VersionHistoryDictionary();
             }
 
-            if (VersionHistories.ContainsKey(versionHistory.Id))
+            if (VersionHistories.ContainsKey(versionHistory.Id()))
             {
-                throw new InvalidOperationException("重复注册: " + versionHistory.Id);
+                throw new InvalidOperationException("重复注册: " + versionHistory.Id());
             }
 
-            VersionHistories.Add(versionHistory.Id, versionHistory);
+            VersionHistories.Add(versionHistory.Id(), versionHistory);
             return this;
         }
         

@@ -8,10 +8,20 @@ namespace NbPilot.Common.VersionHistories
     /// </summary>
     public class VersionHistory
     {
+        ///// <summary>
+        ///// Id
+        ///// </summary>
+        //public string Id { get { return string.Format("{0}-{1}", Category, Version); } }
+
         /// <summary>
         /// Id
         /// </summary>
-        public string Id { get { return string.Format("{0}-{1}", Category, Version); } }
+        public string Id()
+        {
+            return string.Format("{0}-{1}", Category, Version); 
+        }
+
+
         /// <summary>
         /// 分类(系统的分类标识)
         /// 分类+版本号=主键
@@ -37,7 +47,6 @@ namespace NbPilot.Common.VersionHistories
         /// <param name="version"></param>
         /// <param name="description"></param>
         /// <param name="createDate"></param>
-        /// <param name="author"></param>
         /// <returns></returns>
         public static VersionHistory Create(string category, string version, DateTime createDate, string description)
         {

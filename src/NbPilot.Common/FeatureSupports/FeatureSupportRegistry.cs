@@ -35,7 +35,7 @@ namespace NbPilot.Common.FeatureSupports
             {
                 throw new ArgumentNullException("registry");
             }
-
+            //todo validate?
             var initDataContext = InitDataContext.Resolve();
             initDataContext.Save(new List<FeatureSupportRegistry>() { registry });
         }

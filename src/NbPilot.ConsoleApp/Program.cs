@@ -7,7 +7,8 @@ namespace NbPilot.ConsoleApp
     {
         static void Main(string[] args)
         {
-            FeatureSupportRegistryDemo.Run();
+            //FeatureSupportRegistryDemo.Run();
+            VersionHistoryRegistryDemo.Run();
             Console.Read();
         }
     }
