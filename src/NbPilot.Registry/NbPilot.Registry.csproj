@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D5710373-84A8-4073-97A1-14E54984F9F4}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{A3CA9EB3-B8E4-4827-95DA-5148493BCC91}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NbPilot.ConsoleApp</RootNamespace>
-    <AssemblyName>NbPilot.ConsoleApp</AssemblyName>
+    <RootNamespace>NbPilot</RootNamespace>
+    <AssemblyName>NbPilot.Registry</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -41,22 +39,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Demos\FeatureSupportRegistryDemo.cs" />
-    <Compile Include="Demos\VersionHistoryRegistryDemo.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Common\VersionHistoryConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NbPilot.Common\NbPilot.Common.csproj">
       <Project>{49b10598-87b3-4b1a-99cc-acea9ebf36bf}</Project>
       <Name>NbPilot.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NbPilot.Registry\NbPilot.Registry.csproj">
-      <Project>{a3ca9eb3-b8e4-4827-95da-5148493bcc91}</Project>
-      <Name>NbPilot.Registry</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

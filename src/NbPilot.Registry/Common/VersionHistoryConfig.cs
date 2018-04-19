@@ -1,7 +1,7 @@
 ﻿using System;
 using NbPilot.Common.VersionHistories;
 
-namespace NbPilot.Common.Metas
+namespace NbPilot.Common
 {
     public class VersionHistoryConfig : IVersionHistoryConfig
     {
@@ -15,6 +15,7 @@ namespace NbPilot.Common.Metas
             registry.AddWithAutoKey(VersionHistory.Create(VersionCategory, "0.1.0", new DateTime(2018, 04, 11), "初始版本"));
             registry.AddWithAutoKey(VersionHistory.Create(VersionCategory, "0.2.0", new DateTime(2018, 04, 11), "增加ResolveAsSingleton的支持;增加GuidHelper"));
             registry.AddWithAutoKey(VersionHistory.Create(VersionCategory, "0.3.0", new DateTime(2018, 04, 12), "增加模块化的支持;"));
+            registry.AddWithAutoKey(VersionHistory.Create(VersionCategory, "0.4.0", new DateTime(2018, 04, 19), "增加产品、特性支持;"));
         }
     }
 }

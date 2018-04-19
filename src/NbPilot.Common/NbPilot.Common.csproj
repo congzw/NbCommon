@@ -64,7 +64,6 @@
     <Compile Include="Supports\FeatureSupportTable.cs" />
     <Compile Include="GuidHelper.cs" />
     <Compile Include="Supports\FeatureSupportRegistry.cs" />
-    <Compile Include="Metas\VersionHistoryConfig.cs" />
     <Compile Include="Modules\DependsOnAttribute.cs" />
     <Compile Include="Modules\NbKernelModule.cs" />
     <Compile Include="Modules\NbModule.cs" />
