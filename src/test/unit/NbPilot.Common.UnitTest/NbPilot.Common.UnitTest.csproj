@@ -54,6 +54,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AppData\AppFolderPathSpec.cs" />
+    <Compile Include="AppData\FileDbHelperSpec.cs" />
+    <Compile Include="AppData\InitJsonFilePathSpec.cs" />
+    <Compile Include="AppData\Init\InitDataContextSpec.cs" />
     <Compile Include="Extensions\StringExtensionsSpecs.cs" />
     <Compile Include="GuidHelperSpec.cs" />
     <Compile Include="Modules\Mocks.cs" />
