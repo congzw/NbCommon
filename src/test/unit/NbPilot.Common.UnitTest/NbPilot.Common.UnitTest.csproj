@@ -59,6 +59,9 @@
     <Compile Include="AppData\InitJsonFilePathSpec.cs" />
     <Compile Include="AppData\Init\InitDataContextSpec.cs" />
     <Compile Include="Extensions\StringExtensionsSpecs.cs" />
+    <Compile Include="Internal\TypeActivatorSpec.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Supports\FeatureSupportTableSpec.cs" />
     <Compile Include="Supports\Mocks.cs" />
     <Compile Include="Supports\ProductCodeContextSpec.cs" />

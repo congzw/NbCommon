@@ -59,8 +59,12 @@
     <Compile Include="Collections\Extensions\ListExtensions.cs" />
     <Compile Include="Collections\ITypeList.cs" />
     <Compile Include="Collections\TypeList.cs" />
+    <Compile Include="Dependencies\EmptyResolver.cs" />
+    <Compile Include="Dependencies\IDependencyResolver.cs" />
+    <Compile Include="Dependencies\IDependencyScope.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Internal\TypeActivator.cs" />
     <Compile Include="Supports\FeatureSupportTable.cs" />
     <Compile Include="GuidHelper.cs" />
     <Compile Include="Supports\FeatureSupportRegistry.cs" />
