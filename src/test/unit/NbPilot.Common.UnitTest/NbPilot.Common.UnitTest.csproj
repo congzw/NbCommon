@@ -62,6 +62,8 @@
     <Compile Include="Internal\TypeActivatorSpec.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Registries\Mocks.cs" />
+    <Compile Include="Registries\NbRegistrySpec.cs" />
     <Compile Include="Supports\FeatureSupportTableSpec.cs" />
     <Compile Include="Supports\Mocks.cs" />
     <Compile Include="Supports\ProductCodeContextSpec.cs" />

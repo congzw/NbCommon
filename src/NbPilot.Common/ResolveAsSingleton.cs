@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Threading;
+using NbPilot.Common.Internal;
 
 namespace NbPilot.Common
 {
@@ -61,10 +61,5 @@ namespace NbPilot.Common
         }
 
         #endregion
-    }
-
-    internal sealed class AutoResolveAsSingletonHelper<T>
-    {
-        public static readonly Lazy<T> Lazy = new Lazy<T>(LazyThreadSafetyMode.ExecutionAndPublication);
     }
 }
