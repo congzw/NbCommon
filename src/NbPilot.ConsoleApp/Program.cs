@@ -1,5 +1,4 @@
 ﻿using System;
-using NbPilot.ConsoleApp.Demos;
 
 namespace NbPilot.ConsoleApp
 {
@@ -7,8 +6,9 @@ namespace NbPilot.ConsoleApp
     {
         static void Main(string[] args)
         {
+            //EmailDemo.Run();
             //FeatureSupportRegistryDemo.Run();
-            VersionHistoryRegistryDemo.Run();
+            //VersionHistoryRegistryDemo.Run();
             Console.Read();
         }
     }
