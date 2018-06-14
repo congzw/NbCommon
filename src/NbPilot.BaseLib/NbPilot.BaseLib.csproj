@@ -39,10 +39,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseLib\Rbac2\AppServices\IUserRoleAppService.cs" />
+    <Compile Include="BaseLib\Rbac2\Domains\UserRoles\IUserRoleService.cs" />
+    <Compile Include="BaseLib\Rbac2\Domains\UserRoles\UserRole.cs" />
+    <Compile Include="BaseLib\Rbac2\Maps\EntityMaps.cs" />
     <Compile Include="BaseLib\Users2\AppServices\Impl\UserAppService.cs" />
+    <Compile Include="BaseLib\Users2\AppServices\ITeacherAppService.cs" />
     <Compile Include="BaseLib\Users2\AppServices\IUserAppService.cs" />
     <Compile Include="BaseLib\Users2\Domains\Users\UserChangeOrg.cs" />
     <Compile Include="BaseLib\Users2\Domains\Users\LocateUser.cs" />
+    <Compile Include="BaseLib\Users2\Domains\Users\Impl\UserService.cs" />
     <Compile Include="BaseLib\Users2\Maps\EntityMaps.cs" />
     <Compile Include="Common\BaseViewModel.cs" />
     <Compile Include="Common\CrudRepository.cs" />
@@ -53,10 +59,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BaseLib\Users2\Domains\Users\User.cs" />
     <Compile Include="BaseLib\Users2\Domains\Users\UserRepository.cs" />
-    <Compile Include="BaseLib\Users2\Domains\Users\UserService.cs" />
+    <Compile Include="BaseLib\Users2\Domains\Users\IUserService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="BaseLib\Users2\Domains\Users\Impl\" />
+    <Folder Include="BaseLib\Facades2\" />
+    <Folder Include="BaseLib\Rbac2\AppServices\Impl\" />
+    <Folder Include="BaseLib\Rbac2\Domains\Impl\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
