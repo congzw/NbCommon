@@ -128,39 +128,6 @@ namespace NbPilot.ConsoleApp.Demos.SendEmails
             var success = simpleEmailHelper.TrySendEmail(simpleEmailConfig, simpleEmail, out message);
             Console.WriteLine(success);
             Console.WriteLine(message);
-            //var smtpAddress = "smtp.mxhichina.com";
-            //var portNumber = 25;
-            //var emailFrom = "nbservice@zqnb.com.cn";
-            //var emailFromPassword = "Zqnb12345";
-
-            //var emailTo = "46074987@qq.com";
-            //bool enableSSL = true;
-
-            ////string password = "abcdefg";
-            ////string emailTo = "someone@domain.com";
-            //string subject = "Hello";
-            //string body = "<h2>Hello, I'm just writing this to say Hi!</h2>";
-
-
-            //using (MailMessage mail = new MailMessage())
-            //{
-            //    mail.From = new MailAddress(emailFrom);
-            //    mail.To.Add(emailTo);
-            //    mail.Subject = subject;
-            //    mail.Body = body;
-            //    mail.IsBodyHtml = true;
-            //    // Can set to false, if you are sending pure text.
-
-            //    //mail.Attachments.Add(new Attachment("C:\\SomeFile.txt"));
-            //    //mail.Attachments.Add(new Attachment("C:\\SomeZip.zip"));
-
-            //    using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber))
-            //    {
-            //        smtp.Credentials = new NetworkCredential(emailFrom, emailFromPassword);
-            //        smtp.EnableSsl = enableSSL;
-            //        smtp.Send(mail);
-            //    }
-            //}
         }
     }
 }
