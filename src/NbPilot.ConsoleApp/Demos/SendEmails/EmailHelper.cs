@@ -124,6 +124,7 @@ namespace NbPilot.ConsoleApp.Demos.SendEmails
 
     public interface IPasswordResetByEmailService
     {
+        MessageResult SendEmail(SimpleEmail email);
         MessageResult Validate(ResetToken token);
         MessageResult Reset(ResetPasswordDto resetPasswordDto);
     }
@@ -154,12 +155,28 @@ namespace NbPilot.ConsoleApp.Demos.SendEmails
     public class PasswordResetByEmailService : IPasswordResetByEmailService
     {
         private readonly IResetPasswordByEmailRepository _resetPasswordByEmailRepository;
+        private readonly ISimpleEmailConfigRepository _simpleEmailConfigRepository;
+        private readonly ISimpleEmailHelper _simpleEmailHelper;
         private readonly INbAuthenticationManager _authenticationManager;
 
-        public PasswordResetByEmailService(IResetPasswordByEmailRepository resetPasswordByEmailRepository, INbAuthenticationManager authenticationManager)
+        public PasswordResetByEmailService(IResetPasswordByEmailRepository resetPasswordByEmailRepository,
+            ISimpleEmailConfigRepository simpleEmailConfigRepository,
+            ISimpleEmailHelper simpleEmailHelper,
+            INbAuthenticationManager authenticationManager)
         {
             _resetPasswordByEmailRepository = resetPasswordByEmailRepository;
+            _simpleEmailConfigRepository = simpleEmailConfigRepository;
+            _simpleEmailHelper = simpleEmailHelper;
             _authenticationManager = authenticationManager;
+        }
+
+        public MessageResult SendEmail(SimpleEmail email)
+        {
+            //get email config
+            //send email
+            //save ResetPasswordByEmail
+            //done!
+            throw new NotImplementedException();
         }
 
         public MessageResult Validate(ResetToken token)
@@ -185,6 +202,7 @@ namespace NbPilot.ConsoleApp.Demos.SendEmails
     public interface IResetPasswordByEmailRepository
     {
         ResetPasswordByEmail GetByTokenKey(string tokenKey);
+        void Save(ResetPasswordByEmail resetPasswordByEmail);
         MessageResult Process(ResetPasswordByEmail entity);
     }
 
@@ -238,6 +256,11 @@ namespace NbPilot.ConsoleApp.Demos.SendEmails
         MessageResult ResetUserPassword(string identity, string newPassword);
     }
 
+    public interface IAccountService
+    {
+        object GetAccount(string email);
+    }
+
     #endregion
 
     #endregion
@@ -247,12 +270,32 @@ namespace NbPilot.ConsoleApp.Demos.SendEmails
     public class AccountController
     {
         private readonly IPasswordResetByEmailService _passwordResetByEmailService;
+        private readonly IAccountService _accountService;
+        private readonly ISimpleEmailConfigRepository _simpleEmailConfigRepository;
+        private readonly ISimpleEmailHelper _simpleEmailHelper;
 
-        public AccountController(IPasswordResetByEmailService passwordResetByEmailService)
+        public AccountController(IPasswordResetByEmailService passwordResetByEmailService, IAccountService accountService, ISimpleEmailConfigRepository simpleEmailConfigRepository, ISimpleEmailHelper simpleEmailHelper)
         {
             _passwordResetByEmailService = passwordResetByEmailService;
+            _accountService = accountService;
+            _simpleEmailConfigRepository = simpleEmailConfigRepository;
+            _simpleEmailHelper = simpleEmailHelper;
         }
 
+        //[HttpPost]
+        public void SendResetEmail(string email)
+        {
+            //validate if should send email format...
+            var account = _accountService.GetAccount(email);
+            if (account == null)
+            {
+                return;
+            }
+            var simpleEmail = new SimpleEmail();
+            //init email values
+            var messageResult = _passwordResetByEmailService.SendEmail(simpleEmail);
+            //return View();
+        }
         //[HttpGet]
         public void ResetPassword(ResetToken token)
         {
