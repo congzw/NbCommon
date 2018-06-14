@@ -1,37 +1,49 @@
 ﻿using System;
 using System.Net;
 using System.Net.Mail;
+using NbPilot.Common;
 
 namespace NbPilot.ConsoleApp.Demos.SendEmails
 {
-    public interface ISimpleEmailConfigService
+    public class EmailDemo
     {
-        SimpleEmailConfig GetSimpleEmailConfig();
-        void SaveSimpleEmailConfig(SimpleEmailConfig config);
+        public static void Run()
+        {
+            Console.WriteLine("BEGIN");
+            Send();
+            Console.WriteLine("DONE");
+        }
+        
+        private static void Send()
+        {
+            var simpleEmailConfigService = new SimpleEmailConfigRepository();
+            var simpleEmailConfig = simpleEmailConfigService.GetSimpleEmailConfig();
+
+            var simpleEmailHelper = new SimpleEmailHelper();
+            var simpleEmail = new SimpleEmail()
+            {
+                EmailTo = "46074987@qq.com",
+                Body = "<h2>Hello, I'm just writing this to say Hi!</h2>",
+                Subject = "Hello",
+                IsBodyHtml = true
+            };
+            string message;
+            var success = simpleEmailHelper.TrySendEmail(simpleEmailConfig, simpleEmail, out message);
+            Console.WriteLine(success);
+            Console.WriteLine(message);
+        }
     }
 
-    public class SimpleEmailConfigService : ISimpleEmailConfigService
-    {
-        public SimpleEmailConfig GetSimpleEmailConfig()
-        {
-            //todo read from config 
-            //todo encrypt/decrypt EmailPassword
-            var config = new SimpleEmailConfig();
-            config.SmtpClientAddress = "smtp.mxhichina.com";
-            config.SmtpClientPort = 25;
-            config.EnableSsl = true;
-            config.EmailFrom = "nbservice@zqnb.com.cn";
-            config.EmailPassword = "{Password}"; //Company[Zq..]+1~5 
-            return config;
-        }
+    #region Common
 
-        public void SaveSimpleEmailConfig(SimpleEmailConfig config)
-        {
-            //todo save from config 
-            //todo encrypt/decrypt EmailPassword
-            throw new NotImplementedException();
-        }
+    public class MessageResult
+    {
+        public bool Success { get; set; }
+        public string Message { get; set; }
     }
+
+    #region SimpleEmail Helpers
+
 
     public interface ISimpleEmailHelper
     {
@@ -101,33 +113,194 @@ namespace NbPilot.ConsoleApp.Demos.SendEmails
             return success;
         }
     }
-    
-    public class EmailDemo
-    {
-        public static void Run()
-        {
-            Console.WriteLine("BEGIN");
-            Send();
-            Console.WriteLine("DONE");
-        }
-        
-        private static void Send()
-        {
-            var simpleEmailConfigService = new SimpleEmailConfigService();
-            var simpleEmailConfig = simpleEmailConfigService.GetSimpleEmailConfig();
 
-            var simpleEmailHelper = new SimpleEmailHelper();
-            var simpleEmail = new SimpleEmail()
-            {
-                EmailTo = "46074987@qq.com",
-                Body = "<h2>Hello, I'm just writing this to say Hi!</h2>",
-                Subject = "Hello",
-                IsBodyHtml = true
-            };
-            string message;
-            var success = simpleEmailHelper.TrySendEmail(simpleEmailConfig, simpleEmail, out message);
-            Console.WriteLine(success);
-            Console.WriteLine(message);
+    #endregion
+
+    #endregion
+
+    #region Domain
+    
+    #region PasswordResetByEmail Service
+
+    public interface IPasswordResetByEmailService
+    {
+        MessageResult Validate(ResetToken token);
+        MessageResult Reset(ResetPasswordDto resetPasswordDto);
+    }
+
+    public class ResetPasswordDto
+    {
+        public ResetToken Token { get; set; }
+        public string NewPassword { get; set; }
+        public string ConfirmPassword { get; set; }
+        public MessageResult ValidateSelf()
+        {
+            //todo
+            return null;
         }
     }
+
+    public class ResetToken
+    {
+        public string Key { get; set; }
+
+        public MessageResult ValidateSelf()
+        {
+            //todo
+            return null;
+        }
+    }
+
+    public class PasswordResetByEmailService : IPasswordResetByEmailService
+    {
+        private readonly IResetPasswordByEmailRepository _resetPasswordByEmailRepository;
+        private readonly INbAuthenticationManager _authenticationManager;
+
+        public PasswordResetByEmailService(IResetPasswordByEmailRepository resetPasswordByEmailRepository, INbAuthenticationManager authenticationManager)
+        {
+            _resetPasswordByEmailRepository = resetPasswordByEmailRepository;
+            _authenticationManager = authenticationManager;
+        }
+
+        public MessageResult Validate(ResetToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MessageResult Reset(ResetPasswordDto resetPasswordDto)
+        {
+            //validate
+            //get ResetPasswordByEmail
+            //reset password
+            //process ResetPasswordByEmail (remove or change record status)
+            //event bus & done!
+            throw new NotImplementedException();
+        }
+    }
+
+    #endregion
+
+    #region ResetPasswordByEmail & Reposigory
+
+    public interface IResetPasswordByEmailRepository
+    {
+        ResetPasswordByEmail GetByTokenKey(string tokenKey);
+        MessageResult Process(ResetPasswordByEmail entity);
+    }
+
+    public class ResetPasswordByEmail
+    {
+        public virtual string TokenKey { get; set; }
+        public virtual string Email { get; set; }
+        public virtual bool Processed { get; set; }
+        public virtual DateTime CreateTime { get; set; }
+    }
+
+    #endregion
+
+    #region SimpleEmailConfig Repository
+
+    public interface ISimpleEmailConfigRepository
+    {
+        SimpleEmailConfig GetSimpleEmailConfig();
+        void SaveSimpleEmailConfig(SimpleEmailConfig config);
+    }
+
+    public class SimpleEmailConfigRepository : ISimpleEmailConfigRepository
+    {
+        public SimpleEmailConfig GetSimpleEmailConfig()
+        {
+            //todo read from config 
+            //todo encrypt/decrypt EmailPassword
+            var config = new SimpleEmailConfig();
+            config.SmtpClientAddress = "smtp.mxhichina.com";
+            config.SmtpClientPort = 25;
+            config.EnableSsl = true;
+            config.EmailFrom = "nbservice@zqnb.com.cn";
+            config.EmailPassword = "{Password}"; //Company[Zq..]+1~5 
+            return config;
+        }
+
+        public void SaveSimpleEmailConfig(SimpleEmailConfig config)
+        {
+            //todo save from config 
+            //todo encrypt/decrypt EmailPassword
+            throw new NotImplementedException();
+        }
+    }
+
+    #endregion
+
+    #region outer refs
+
+    public interface INbAuthenticationManager
+    {
+        MessageResult ResetUserPassword(string identity, string newPassword);
+    }
+
+    #endregion
+
+    #endregion
+
+    #region App
+
+    public class AccountController
+    {
+        private readonly IPasswordResetByEmailService _passwordResetByEmailService;
+
+        public AccountController(IPasswordResetByEmailService passwordResetByEmailService)
+        {
+            _passwordResetByEmailService = passwordResetByEmailService;
+        }
+
+        //[HttpGet]
+        public void ResetPassword(ResetToken token)
+        {
+            var vr = ValidateResetToken(token);
+            if (!vr.Success)
+            {
+                throw new NbException(vr.Message);
+            }
+            //return View();
+        }
+
+        //[HttpPost]
+        public void ResetPassword(ResetPasswordDto dto)
+        {
+            var vr = dto.ValidateSelf();
+            if (!vr.Success)
+            {
+                throw new NbException(vr.Message);
+            }
+            vr = ValidateResetToken(dto.Token);
+            if (!vr.Success)
+            {
+                throw new NbException(vr.Message);
+            }
+
+            vr = _passwordResetByEmailService.Reset(dto);
+            if (!vr.Success)
+            {
+                throw new NbException(vr.Message);
+            }
+            //return Json(vr);
+        }
+
+        private MessageResult ValidateResetToken(ResetToken token)
+        {
+            var vr = token.ValidateSelf();
+            if (!vr.Success)
+            {
+                return vr;
+            }
+            vr = _passwordResetByEmailService.Validate(token);
+            if (!vr.Success)
+            {
+                return vr;
+            }
+            return new MessageResult() { Success = true, Message = "ResetToken Validate OK" };
+        }
+    }
+
+    #endregion
 }
