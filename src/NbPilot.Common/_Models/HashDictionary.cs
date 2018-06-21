@@ -10,7 +10,7 @@ namespace NbPilot.Common
 {
     public class HashDictionary : IDictionary<string, object>
     {
-        private readonly Dictionary<string, string> _hashValueDictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, string> _initHashValues = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         private readonly Dictionary<string, object> _innerDictionary = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
 
         public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
@@ -25,13 +25,12 @@ namespace NbPilot.Common
 
         public void Add(KeyValuePair<string, object> item)
         {
-            ((IDictionary<string, string>)_hashValueDictionary).Add(new KeyValuePair<string, string>(item.Key, item.Value.CreateObjectHash()));
+            ((IDictionary<string, string>)_initHashValues).Add(new KeyValuePair<string, string>(item.Key, item.Value.CreateObjectHash()));
             ((IDictionary<string, object>)_innerDictionary).Add(item);
         }
 
         public void Clear()
         {
-            _hashValueDictionary.Clear();
             _innerDictionary.Clear();
         }
 
@@ -47,7 +46,6 @@ namespace NbPilot.Common
 
         public bool Remove(KeyValuePair<string, object> item)
         {
-            _hashValueDictionary.Remove(item.Key);
             return ((IDictionary<string, object>)_innerDictionary).Remove(item);
         }
 
@@ -69,13 +67,12 @@ namespace NbPilot.Common
 
         public void Add(string key, object value)
         {
-            _hashValueDictionary.Add(key, value.CreateObjectHash());
+            _initHashValues.Add(key, value.CreateObjectHash());
             _innerDictionary.Add(key, value);
         }
 
         public bool Remove(string key)
         {
-            _hashValueDictionary.Remove(key);
             return _innerDictionary.Remove(key);
         }
 
@@ -94,7 +91,10 @@ namespace NbPilot.Common
             }
             set
             {
-                _hashValueDictionary[key] = value.CreateObjectHash();
+                if (!_initHashValues.ContainsKey(key))
+                {
+                    _initHashValues[key] = value.CreateObjectHash();
+                }
                 _innerDictionary[key] = value;
             }
         }
@@ -111,7 +111,7 @@ namespace NbPilot.Common
         
         public IDictionary<string, string> GetHashValues()
         {
-            return _hashValueDictionary;
+            return _initHashValues;
         }
 
         public string GetHashValue(string key)
@@ -121,7 +121,7 @@ namespace NbPilot.Common
             {
                 return string.Empty;
             }
-            return _hashValueDictionary[key];
+            return _initHashValues[key];
         }
 
         public T GetValueAs<T>(string key)
@@ -151,11 +151,17 @@ namespace NbPilot.Common
         /// <returns></returns>
         public static bool CheckChanged(this HashDictionary hashModel, string key)
         {
-            if (hashModel == null || key == null || !hashModel.ContainsKey(key))
+            if (hashModel == null || key == null)
             {
                 return false;
             }
-            var hashValue = hashModel.GetHashValue(key);
+
+            var hashValues = hashModel.GetHashValues();
+            if (!hashValues.ContainsKey(key))
+            {
+                return false;
+            }
+            var hashValue = hashValues[key];
             return !hashModel[key].VerifyObjectHash(hashValue);
         }
 
