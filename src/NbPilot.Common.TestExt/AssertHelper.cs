@@ -52,9 +52,10 @@ namespace NbPilot.Common
         {
             Debug.WriteLine(message);
         }
-        public static void WriteLineForShouldBeTrue(bool result)
+        public static void WriteLineForShouldBeTrue(bool result, string appendMessage = null)
         {
-            var message = "应该是'true'";
+            var message = CreateAppendMessage("应该是'true'", appendMessage);
+
             if (result)
             {
                 WriteLineOk(message);
@@ -64,9 +65,10 @@ namespace NbPilot.Common
                 WriteLineKo(message);
             }
         }
-        public static void WriteLineForShouldBeFalse(bool result)
+        public static void WriteLineForShouldBeFalse(bool result, string appendMessage = null)
         {
-            var message = "应该是'false'";
+            var message = CreateAppendMessage("应该是'false'", appendMessage);
+
             if (!result)
             {
                 WriteLineOk(message);
@@ -76,9 +78,10 @@ namespace NbPilot.Common
                 WriteLineKo(message);
             }
         }
-        public static void WriteLineForShouldBeNull(object result)
+        public static void WriteLineForShouldBeNull(object result, string appendMessage = null)
         {
-            var message = "应该是'null'";
+            var message = CreateAppendMessage("应该是'null'", appendMessage);
+
             if (result == null)
             {
                 WriteLineOk(message);
@@ -88,9 +91,10 @@ namespace NbPilot.Common
                 WriteLineKo(message + ": " + result);
             }
         }
-        public static void WriteLineForShouldBeNotNull(object result)
+        public static void WriteLineForShouldBeNotNull(object result, string appendMessage = null)
         {
-            var message = "应该不是'null'";
+            var message = CreateAppendMessage("应该不是'null'", appendMessage);
+
             if (result != null)
             {
                 WriteLineOk(message);
@@ -99,6 +103,15 @@ namespace NbPilot.Common
             {
                 WriteLineKo(message + ": null");
             }
+        }
+
+        private static string CreateAppendMessage(string message, string append)
+        {
+            if (!string.IsNullOrWhiteSpace(append))
+            {
+                message = message + " => " + append;
+            }
+            return message;
         }
     }
 }

@@ -15,16 +15,16 @@ namespace NbPilot.Common
             AssertHelper.ShouldThrows<T>(action);
         }
 
-        public static object ShouldNull(this object value)
+        public static object ShouldNull(this object value, string appendMessage = null)
         {
-            AssertHelper.WriteLineForShouldBeNull(value);
+            AssertHelper.WriteLineForShouldBeNull(value, appendMessage);
             Assert.IsNull(value);
             return value;
         }
 
-        public static object ShouldNotNull(this object value)
+        public static object ShouldNotNull(this object value, string appendMessage = null)
         {
-            AssertHelper.WriteLineForShouldBeNotNull(value);
+            AssertHelper.WriteLineForShouldBeNotNull(value, appendMessage);
             Assert.IsNotNull(value);
             return value;
         }
@@ -86,15 +86,15 @@ namespace NbPilot.Common
             return value;
         }
 
-        public static void ShouldTrue(this bool result)
+        public static void ShouldTrue(this bool result, string appendMessage = null)
         {
-            AssertHelper.WriteLineForShouldBeTrue(result);
+            AssertHelper.WriteLineForShouldBeTrue(result, appendMessage);
             Assert.IsTrue(result);
         }
 
-        public static void ShouldFalse(this bool result)
+        public static void ShouldFalse(this bool result, string appendMessage = null)
         {
-            AssertHelper.WriteLineForShouldBeFalse(result);
+            AssertHelper.WriteLineForShouldBeFalse(result, appendMessage);
             Assert.IsFalse(result);
         }
 
