@@ -78,6 +78,7 @@
     <Compile Include="Trees\TreeItemHolderSpec.cs" />
     <Compile Include="VersionHistories\Mocks.cs" />
     <Compile Include="VersionHistories\VersionHistoryRegistrySpec.cs" />
+    <Compile Include="_Models\ObjectHashHelperSpecs.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\NbPilot.Common.TestExt\NbPilot.Common.TestExt.csproj">

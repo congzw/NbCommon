@@ -45,6 +45,20 @@ namespace NbPilot.Common
             return value;
         }
 
+        //public static void ShouldNbEqual(this string value, string str2)
+        //{
+        //    var nbEquals = value.NbEquals(str2);
+        //    Debug.WriteLine("{0} nbqueal {1} ? {2}", value ?? "null", str2 ?? "null", nbEquals);
+        //    Assert.IsTrue(nbEquals);
+        //}
+
+        //public static void ShouldNotNbEqual(this string value, string str2)
+        //{
+        //    var nbEquals = value.NbEquals(str2);
+        //    Debug.WriteLine("{0} nbqueal {1} ? {2}", value ?? "null", str2 ?? "null", nbEquals);
+        //    Assert.IsFalse(nbEquals);
+        //}
+
 
         public static object ShouldSame(this object value, object expectedValue)
         {
