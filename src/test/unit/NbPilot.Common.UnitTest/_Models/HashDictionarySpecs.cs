@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+// ReSharper disable CheckNamespace
 
-namespace NbPilot.Common._Models
+namespace NbPilot.Common
 {
     [TestClass]
     public class HashDictionarySpecs
