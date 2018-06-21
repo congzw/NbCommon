@@ -69,6 +69,9 @@
     <Compile Include="Registries\INbRegistryService.cs" />
     <Compile Include="Registries\NbRegistry.cs" />
     <Compile Include="Registries\NbRegistryRepository.cs" />
+    <Compile Include="StackTraceLogger.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Supports\FeatureSupportTable.cs" />
     <Compile Include="GuidHelper.cs" />
     <Compile Include="Supports\FeatureSupportRegistry.cs" />
