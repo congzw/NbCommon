@@ -15,6 +15,9 @@ namespace NbPilot.Common
         /// <returns></returns>
         public static string CurrentStackCustomizedLog()
         {
+            ////not include line number of sourceFile
+            //return Environment.StackTrace;
+
             var stackLog = new StringBuilder();
             var currentStack = new StackTrace(true);
 
