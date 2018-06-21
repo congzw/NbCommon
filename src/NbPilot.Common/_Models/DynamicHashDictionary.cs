@@ -117,4 +117,23 @@ namespace NbPilot.Common
 
         #endregion
     }
+
+    /// <summary>
+    /// DynamicHashDictionary Extensions
+    /// </summary>
+    public static class DynamicHashDictionaryExtensions
+    {
+        //refact after read this article
+        //https://www.thomaslevesque.com/2009/10/08/c-4-0-implementing-a-custom-dynamic-object/
+
+        /// <summary>
+        /// As Dynamic
+        /// </summary>
+        /// <param name="dynamicHashDictionary"></param>
+        /// <returns></returns>
+        public static dynamic AsDynamic(this DynamicHashDictionary dynamicHashDictionary)
+        {
+            return dynamicHashDictionary;
+        }
+    }
 }

@@ -19,16 +19,11 @@ namespace NbPilot.Common
             mockTraceItemB.Items.Add(new MockTraceItem());
 
             _dynamicHashModel = new DynamicHashDictionary();
-            var dynamicHashModel = AsDynamic();
+            var dynamicHashModel = _dynamicHashModel.AsDynamic();
             dynamicHashModel.A = mockTraceItemA;
             dynamicHashModel.B = mockTraceItemB;
         }
-
-        private dynamic AsDynamic()
-        {
-            return _dynamicHashModel;
-        }
-
+        
 
         [TestCleanup()]
         public void MyTestCleanup()
@@ -45,7 +40,7 @@ namespace NbPilot.Common
         [TestMethod]
         public void CheckAnyChanged_AnyChange_Should_OK()
         {
-            var dynamicHashModel = AsDynamic();
+            var dynamicHashModel = _dynamicHashModel.AsDynamic();
             dynamicHashModel.A.Name = "Changed";
             _dynamicHashModel.CheckAnyChanged().ShouldTrue(); //same logic => ((bool)dynamicHashModel.CheckAnyChanged()).ShouldTrue();
         }
@@ -53,7 +48,7 @@ namespace NbPilot.Common
         [TestMethod]
         public void CheckChanged_PropertyChange_Should_OK()
         {
-            var dynamicHashModel = AsDynamic();
+            var dynamicHashModel = _dynamicHashModel.AsDynamic();
             dynamicHashModel.A.Name = "Changed";
 
             _dynamicHashModel.CheckChanged("A").ShouldTrue();
@@ -63,7 +58,7 @@ namespace NbPilot.Common
         [TestMethod]
         public void CheckChanged_NotExistPropertyChange_Should_False()
         {
-            var dynamicHashModel = AsDynamic();
+            var dynamicHashModel = _dynamicHashModel.AsDynamic();
             object notExist = dynamicHashModel.NotExist;
             notExist.ShouldNull();
             _dynamicHashModel.CheckChanged("NotExist").ShouldFalse();
