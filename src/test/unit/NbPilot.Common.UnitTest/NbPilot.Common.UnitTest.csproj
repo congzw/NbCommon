@@ -39,6 +39,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -78,6 +79,7 @@
     <Compile Include="Trees\TreeItemHolderSpec.cs" />
     <Compile Include="VersionHistories\Mocks.cs" />
     <Compile Include="VersionHistories\VersionHistoryRegistrySpec.cs" />
+    <Compile Include="_Models\DynamicHashDictionarySpecs.cs" />
     <Compile Include="_Models\ObjectHashHelperSpecs.cs" />
   </ItemGroup>
   <ItemGroup>

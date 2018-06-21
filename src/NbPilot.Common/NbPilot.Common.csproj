@@ -87,6 +87,9 @@
     <Compile Include="VersionHistories\IVersionHistoryConfig.cs" />
     <Compile Include="VersionHistories\VersionHistory.cs" />
     <Compile Include="VersionHistories\VersionHistoryRegistry.cs" />
+    <Compile Include="_Models\HashDictionary.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="_Models\ObjectHashHelper.cs" />
   </ItemGroup>
   <ItemGroup>
