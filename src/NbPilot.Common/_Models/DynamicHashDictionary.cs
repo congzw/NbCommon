@@ -8,8 +8,11 @@ namespace NbPilot.Common
 {
     public class DynamicHashDictionary : DynamicObject
     {
-        private readonly HashDictionary _hashData;
+        public DynamicHashDictionary() : this(new HashDictionary())
+        {
+        }
 
+        private readonly HashDictionary _hashData;
         public DynamicHashDictionary(HashDictionary hashData)
         {
             if (hashData == null)
@@ -46,15 +49,6 @@ namespace NbPilot.Common
             DynamicHashData[binder.Name] = value;
             // you can always set a key in the dictionary so return true
             return true;
-        }
-        
-        /// <summary>
-        /// Factory
-        /// </summary>
-        /// <returns></returns>
-        public static DynamicHashDictionary Create()
-        {
-            return new DynamicHashDictionary(new HashDictionary());
         }
 
         #region for check

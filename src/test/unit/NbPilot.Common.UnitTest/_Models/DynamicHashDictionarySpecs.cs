@@ -18,7 +18,7 @@ namespace NbPilot.Common
             mockTraceItemB.Items.Add(new MockTraceItem());
             mockTraceItemB.Items.Add(new MockTraceItem());
 
-            _dynamicHashModel = DynamicHashDictionary.Create();
+            _dynamicHashModel = new DynamicHashDictionary();
             var dynamicHashModel = AsDynamic();
             dynamicHashModel.A = mockTraceItemA;
             dynamicHashModel.B = mockTraceItemB;
