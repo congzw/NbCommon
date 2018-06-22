@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Dynamic;
 using Newtonsoft.Json.Linq;
 
-// ReSharper disable CheckNamespace
-
+// ReSharper disable once CheckNamespace
 namespace NbPilot.Common
 {
-
-
     public interface IHashDictionary
     {
+        IList<Guid> GetVersions();
         IDictionary<string, string> GetHashValues();
         IDictionary<string, object> GetProperties();
         string GetHashValue(string key);
@@ -23,17 +19,20 @@ namespace NbPilot.Common
     {
         public string Key { get; set; }
         public string Hash { get; set; }
-        public int Version { get; set; }
+        public Guid Version { get; set; }
     }
 
     public class HashDictionary : IDictionary<string, object>, IHashDictionary
     {
+        private readonly Guid _currentVersion = Guid.NewGuid();
+        public static readonly string VersionsKey = "_Versions";
         public static readonly string HashValuesKey = "_HashValues";
         //public Dictionary<string, string> _initHashValues = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         private readonly Dictionary<string, object> _innerDictionary = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
 
         public HashDictionary()
         {
+            _innerDictionary.Add(VersionsKey, new List<Guid>(){_currentVersion});
             _innerDictionary.Add(HashValuesKey, new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase));
             //_innerDictionary.Add(HashValuesKey, _initHashValues);
         }
@@ -119,7 +118,12 @@ namespace NbPilot.Common
             }
             set
             {
-                //_innerDictionary[key] = value;
+                if (key == VersionsKey)
+                {
+                    //Console.WriteLine("FROM INDEX[]");
+                    ProcessSerializeVersions(value);
+                    return;
+                }
                 if (key == HashValuesKey)
                 {
                     //Console.WriteLine("FROM INDEX[]");
@@ -152,13 +156,6 @@ namespace NbPilot.Common
             {
                 Console.WriteLine("{0}: {1}", hashValueKey, hashValues[hashValueKey]);
             }
-            Console.WriteLine("Hash current");
-            var initHashValues = GetHashValues();
-            foreach (var hashValueKey in initHashValues.Keys)
-            {
-                Console.WriteLine("{0}: {1}", hashValueKey, initHashValues[hashValueKey]);
-            }
-
             _innerDictionary[HashValuesKey] = hashValues;
 
             #region trace info
@@ -185,6 +182,29 @@ namespace NbPilot.Common
 
             #endregion
         }
+
+        private void ProcessSerializeVersions(object value)
+        {
+            //this can only be invoked from json deserialize
+            //Console.WriteLine(value);
+            var jObject = (JArray)value;
+            var jsonVersions = jObject.ToObject<List<Guid>>();
+
+            Console.WriteLine("Versions From JSON: ");
+            foreach (var @version in jsonVersions)
+            {
+                Console.WriteLine(@version);
+            }
+            var currentVersions = GetVersions();
+            foreach (var jsonVersion in jsonVersions)
+            {
+                if (!currentVersions.Contains(jsonVersion))
+                {
+                    currentVersions.Add(jsonVersion);
+                }
+            }
+            _innerDictionary[VersionsKey] = currentVersions;
+        }
         private void TrySetKeyValueHash(string key, object value)
         {
             if (key == HashValuesKey)
@@ -208,6 +228,11 @@ namespace NbPilot.Common
         }
 
         #region IHashDictionary
+
+        public IList<Guid> GetVersions()
+        {
+            return (List<Guid>)_innerDictionary[VersionsKey];
+        }
 
         public IDictionary<string, string> GetHashValues()
         {
