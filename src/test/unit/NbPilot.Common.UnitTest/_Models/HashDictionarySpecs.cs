@@ -18,12 +18,14 @@ namespace NbPilot.Common
         {
             _hashModel = new HashDictionary();
             var mockTraceItemA = new MockTraceItem();
-            var mockTraceItemB = new MockTraceItem();
-            var mockTraceItemC = new MockTraceItem();
-            mockTraceItemB.Items.Add(new MockTraceItem());
-            mockTraceItemB.Items.Add(new MockTraceItem());
             _hashModel.Add("A", mockTraceItemA);
+
+            var mockTraceItemB = new MockTraceItem();
+            mockTraceItemB.Items.Add(new MockTraceItem());
+            mockTraceItemB.Items.Add(new MockTraceItem());
             _hashModel.Add("B", mockTraceItemB);
+
+            var mockTraceItemC = new MockTraceItem();
             _hashModel.Add("C", mockTraceItemC);
         }
 
@@ -87,6 +89,9 @@ namespace NbPilot.Common
             var vo = nbJsonSerialize.Deserialize<HashDictionary>(httpGetJson);
             vo["A"] = new MockTraceItem() { Name = "Foo" };
             vo.CheckChanged("A").ShouldTrue("A Reset Foo");
+            
+            vo.GetCurrentVersion().ShouldNotNull("GetCurrentVersion").Log();
+            vo.GetHashValues()["B"].Version.ShouldNotNull("B NotRest hash Version").Log();
 
             vo.CheckChanged("B").ShouldFalse("B NotRest");
 
@@ -95,8 +100,8 @@ namespace NbPilot.Common
 
             vo["D"] = new MockTraceItem();
             vo.GetHashValues()["D"].LogProperties();
-            //vo.GetCurrentVersion().Log();
-            //vo.CheckChanged("D").ShouldTrue("Add NEW D");
+            vo.GetCurrentVersion().Log();
+            vo.CheckChanged("D").ShouldTrue("Add NEW D");
             
             var httpPostJson = nbJsonSerialize.Serialize(vo);
             AssertHelper.WriteLine("--httpPostJson--");
@@ -109,9 +114,8 @@ namespace NbPilot.Common
 
             serverGetVo.CheckChanged("A").ShouldTrue("A Reset Foo");
             serverGetVo.CheckChanged("B").ShouldFalse("B NotRest");
-            vo.CheckChanged("C").ShouldFalse("C Rest Same");
-            //todo need fix add not race problems?
-            //serverGetVo.CheckChanged("D").ShouldTrue("Add NEW D");
+            serverGetVo.CheckChanged("C").ShouldFalse("C Rest Same");
+            serverGetVo.CheckChanged("D").ShouldTrue("Add NEW D");
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.Mail;
 using Newtonsoft.Json.Linq;
 
 // ReSharper disable once CheckNamespace
@@ -8,8 +10,9 @@ namespace NbPilot.Common
 {
     public interface IHashDictionary
     {
+        Guid GetCurrentVersion();
         IList<Guid> GetVersions();
-        IDictionary<string, string> GetHashValues();
+        IDictionary<string, HashItem> GetHashValues();
         IDictionary<string, object> GetProperties();
         string GetHashValue(string key);
         T GetValueAs<T>(string key);
@@ -33,7 +36,7 @@ namespace NbPilot.Common
         public HashDictionary()
         {
             _innerDictionary.Add(VersionsKey, new List<Guid>(){_currentVersion});
-            _innerDictionary.Add(HashValuesKey, new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase));
+            _innerDictionary.Add(HashValuesKey, new Dictionary<string, HashItem>(StringComparer.OrdinalIgnoreCase));
             //_innerDictionary.Add(HashValuesKey, _initHashValues);
         }
 
@@ -149,13 +152,14 @@ namespace NbPilot.Common
             //this can only be invoked from json deserialize, so replace the process init hash values
             //Console.WriteLine(value);
             var jObject = (JObject)value;
-            var hashValues = jObject.ToObject<IDictionary<string, string>>();
+            var hashValues = jObject.ToObject<IDictionary<string, HashItem>>();
 
-            Console.WriteLine("Hash From JSON");
-            foreach (var hashValueKey in hashValues.Keys)
-            {
-                Console.WriteLine("{0}: {1}", hashValueKey, hashValues[hashValueKey]);
-            }
+            //Console.WriteLine("Hash From JSON");
+            //foreach (var hashValueKey in hashValues.Keys)
+            //{
+            //    var hashValue = hashValues[hashValueKey];
+            //    Console.WriteLine("{0}: {1} => {2}", hashValueKey, hashValue.Hash, hashValue.Version);
+            //}
             _innerDictionary[HashValuesKey] = hashValues;
 
             #region trace info
@@ -190,11 +194,11 @@ namespace NbPilot.Common
             var jObject = (JArray)value;
             var jsonVersions = jObject.ToObject<List<Guid>>();
 
-            Console.WriteLine("Versions From JSON: ");
-            foreach (var @version in jsonVersions)
-            {
-                Console.WriteLine(@version);
-            }
+            //Console.WriteLine("Versions From JSON: ");
+            //foreach (var @version in jsonVersions)
+            //{
+            //    Console.WriteLine(@version);
+            //}
             var currentVersions = GetVersions();
             foreach (var jsonVersion in jsonVersions)
             {
@@ -216,7 +220,7 @@ namespace NbPilot.Common
             {
                 return;
             }
-            initHashValues.Add(key, value.CreateObjectHash());
+            initHashValues.Add(key, new HashItem() { Key = key, Hash = value.CreateObjectHash() , Version = GetCurrentVersion()});
         }
         private void TrySetKeyValue(string key, object value)
         {
@@ -229,14 +233,19 @@ namespace NbPilot.Common
 
         #region IHashDictionary
 
+        public Guid GetCurrentVersion()
+        {
+            return _currentVersion;
+        }
+
         public IList<Guid> GetVersions()
         {
             return (List<Guid>)_innerDictionary[VersionsKey];
         }
 
-        public IDictionary<string, string> GetHashValues()
+        public IDictionary<string, HashItem> GetHashValues()
         {
-            return (Dictionary<string, string>)_innerDictionary[HashValuesKey];
+            return (Dictionary<string, HashItem>)_innerDictionary[HashValuesKey];
             //return _initHashValues;
         }
 
@@ -252,7 +261,7 @@ namespace NbPilot.Common
             {
                 return string.Empty;
             }
-            return hashValues[key];
+            return hashValues[key].Hash;
         }
 
         public T GetValueAs<T>(string key)
@@ -299,7 +308,17 @@ namespace NbPilot.Common
                 //be removed!
                 return true;
             }
-            return !properties[key].VerifyObjectHash(hashValue);
+
+            var sameHash = properties[key].VerifyObjectHash(hashValue.Hash);
+            if (!sameHash)
+            {
+                //hash不一样，一定变化
+                return true;
+            }
+
+            //哈希值虽然一样，但只要不是初始版本的，都视为变化（新增）
+            var initVersion = hashModel.GetVersions().LastOrDefault();
+            return initVersion != hashValue.Version;
         }
 
         /// <summary>
