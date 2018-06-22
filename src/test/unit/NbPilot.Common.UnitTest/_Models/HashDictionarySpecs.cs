@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text;
+using NbPilot.Common.Serialize;
+
 // ReSharper disable CheckNamespace
 
 namespace NbPilot.Common
@@ -17,10 +19,12 @@ namespace NbPilot.Common
             _hashModel = new HashDictionary();
             var mockTraceItemA = new MockTraceItem();
             var mockTraceItemB = new MockTraceItem();
+            var mockTraceItemC = new MockTraceItem();
             mockTraceItemB.Items.Add(new MockTraceItem());
             mockTraceItemB.Items.Add(new MockTraceItem());
             _hashModel.Add("A", mockTraceItemA);
             _hashModel.Add("B", mockTraceItemB);
+            _hashModel.Add("C", mockTraceItemC);
         }
 
         [TestCleanup()]
@@ -69,6 +73,45 @@ namespace NbPilot.Common
             _hashModel.Remove("A");
             _hashModel.CheckChanged("A").ShouldTrue("A Removed");
             _hashModel.CheckChanged("B").ShouldFalse("B Not Changed");
+        }
+        
+
+        [TestMethod]
+        public void CheckChanged_Serialize_Should_OK()
+        {
+            var nbJsonSerialize = NbJsonSerialize.Resolve();
+            var httpGetJson = nbJsonSerialize.Serialize(_hashModel);
+            AssertHelper.WriteLine("--httpGetJson--");
+            httpGetJson.Log();
+
+            var vo = nbJsonSerialize.Deserialize<HashDictionary>(httpGetJson);
+            vo["A"] = new MockTraceItem() { Name = "Foo" };
+            vo.CheckChanged("A").ShouldTrue("A Reset Foo");
+
+            vo.CheckChanged("B").ShouldFalse("B NotRest");
+
+            vo["C"] = new MockTraceItem();
+            vo.CheckChanged("C").ShouldFalse("C Rest Same");
+
+            vo["D"] = new MockTraceItem();
+            vo.GetHashValues()["D"].LogProperties();
+            //vo.GetCurrentVersion().Log();
+            //vo.CheckChanged("D").ShouldTrue("Add NEW D");
+            
+            var httpPostJson = nbJsonSerialize.Serialize(vo);
+            AssertHelper.WriteLine("--httpPostJson--");
+            httpPostJson.Log();
+
+            var serverGetVo = nbJsonSerialize.Deserialize<HashDictionary>(httpPostJson);
+            var serverGetVoJson = nbJsonSerialize.Serialize(serverGetVo);
+            AssertHelper.WriteLine("--serverGetVoJson--");
+            serverGetVoJson.Log();
+
+            serverGetVo.CheckChanged("A").ShouldTrue("A Reset Foo");
+            serverGetVo.CheckChanged("B").ShouldFalse("B NotRest");
+            vo.CheckChanged("C").ShouldFalse("C Rest Same");
+            //todo need fix add not race problems?
+            //serverGetVo.CheckChanged("D").ShouldTrue("Add NEW D");
         }
     }
 }
