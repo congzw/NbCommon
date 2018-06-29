@@ -55,7 +55,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="AppData\AppFolderPathSpec.cs" />
+    <Compile Include="MyAppPathSpec.cs" />
     <Compile Include="AppData\FileDbHelperSpec.cs" />
     <Compile Include="AppData\InitJsonFilePathSpec.cs" />
     <Compile Include="AppData\Init\InitDataContextSpec.cs" />

@@ -32,7 +32,7 @@ namespace NbPilot.Common.AppData.Init
         {
             FileDbHelper = AppData.FileDbHelper.Resolve();
             TypeFilePathHelper = AppData.TypeFilePathHelper.Resolve();
-            AppFolderPath = AppData.AppFolderPath.Resolve();
+            AppPath = MyAppPath.Resolve();
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace NbPilot.Common.AppData.Init
         /// <summary>
         /// 应用文件夹帮助类
         /// </summary>
-        public IAppFolderPath AppFolderPath { get; set; }
+        public IMyAppPath AppPath { get; set; }
 
         /// <summary>
         /// 默认的路径生成
@@ -94,8 +94,8 @@ namespace NbPilot.Common.AppData.Init
             {
                 return _initFolder;
             }
-            var appData = AppFolderPath.AppData;
-            _initFolder = AppFolderPath.CombinePath(appData, "Init");
+            var appData = AppPath.AppData;
+            _initFolder = AppPath.CombinePath(appData, "Init");
             return _initFolder;
         }
 

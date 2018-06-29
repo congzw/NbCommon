@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 
-namespace NbPilot.Common.AppData
+namespace NbPilot.Common
 {
-    public interface IAppFolderPath
+    public interface IMyAppPath
     {
         bool IsWebApp { get; set; }
         string BaseDirectory { get; set; }
@@ -12,9 +12,9 @@ namespace NbPilot.Common.AppData
         string CombinePath(string basePath, string subPath);
     }
 
-    public class AppFolderPath : IAppFolderPath
+    public class MyAppPath : IMyAppPath
     {
-        public AppFolderPath()
+        public MyAppPath()
         {
             IsWebApp = GuessIsWebApp();
             Bin = GuessBin(IsWebApp);
@@ -52,8 +52,8 @@ namespace NbPilot.Common.AppData
 
         #region for di extensions
 
-        private static Func<IAppFolderPath> _resolve = () => ResolveAsSingleton.Resolve<AppFolderPath, IAppFolderPath>();
-        public static Func<IAppFolderPath> Resolve
+        private static Func<IMyAppPath> _resolve = () => ResolveAsSingleton.Resolve<MyAppPath, IMyAppPath>();
+        public static Func<IMyAppPath> Resolve
         {
             get { return _resolve; }
             set { _resolve = value; }

@@ -1,15 +1,15 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace NbPilot.Common.AppData
+namespace NbPilot.Common
 {
     [TestClass]
-    public class AppFolderPathSpec
+    public class MyAppPathSpec
     {
         [TestMethod]
         public void IsWebApp_Should_False()
         {
-            var appFolderPath = new AppFolderPath();
+            var appFolderPath = new MyAppPath();
             appFolderPath.LogProperties();
             appFolderPath.IsWebApp.ShouldFalse();
         }
@@ -17,7 +17,7 @@ namespace NbPilot.Common.AppData
         [TestMethod]
         public void BaseDirectory_Should_NotNull()
         {
-            var appFolderPath = new AppFolderPath();
+            var appFolderPath = new MyAppPath();
             appFolderPath.LogProperties();
             appFolderPath.BaseDirectory.ShouldNotNull();
         }
@@ -25,7 +25,7 @@ namespace NbPilot.Common.AppData
         [TestMethod]
         public void AppData_Should_NotNull()
         {
-            var appFolderPath = new AppFolderPath();
+            var appFolderPath = new MyAppPath();
             appFolderPath.LogProperties();
             appFolderPath.AppData.ShouldNotNull();
         }
@@ -33,7 +33,7 @@ namespace NbPilot.Common.AppData
         [TestMethod]
         public void Bin_Should_NotNull()
         {
-            var appFolderPath = new AppFolderPath();
+            var appFolderPath = new MyAppPath();
             appFolderPath.LogProperties();
             appFolderPath.Bin.ShouldNotNull();
         }
@@ -41,7 +41,7 @@ namespace NbPilot.Common.AppData
         [TestMethod]
         public void CreateSubFolder_Should_OK()
         {
-            var appFolderPath = new AppFolderPath();
+            var appFolderPath = new MyAppPath();
             appFolderPath.LogProperties();
             appFolderPath.CombinePath("A", "B").ShouldEqual(@"A\B");
             appFolderPath.CombinePath(@"A\", "B").ShouldEqual(@"A\B");
@@ -51,7 +51,7 @@ namespace NbPilot.Common.AppData
         [TestMethod]
         public void CreateSubFolder_BasePath_Null_Should_Throw()
         {
-            var appFolderPath = new AppFolderPath();
+            var appFolderPath = new MyAppPath();
             appFolderPath.LogProperties();
             appFolderPath.CombinePath(null, "B");
         }
@@ -60,7 +60,7 @@ namespace NbPilot.Common.AppData
         [TestMethod]
         public void CreateSubFolder_SubPath_Null_Should_Throw()
         {
-            var appFolderPath = new AppFolderPath();
+            var appFolderPath = new MyAppPath();
             appFolderPath.LogProperties();
             appFolderPath.CombinePath("A", null);
         }

@@ -48,7 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppData\AppFolderPath.cs" />
+    <Compile Include="MyAppPath.cs" />
     <Compile Include="AppData\FileDbHelper.cs" />
     <Compile Include="AppData\Init\InitDataContext.cs" />
     <Compile Include="AppData\TypeFilePathHelper.cs" />
