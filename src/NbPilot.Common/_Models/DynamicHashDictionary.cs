@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Collections.Specialized;
 using System.Dynamic;
 using System.Linq;
+using System.Web;
+using System.Web.Routing;
 
 // ReSharper disable CheckNamespace
 
@@ -19,6 +21,7 @@ namespace NbPilot.Common
         public DynamicHashDictionary()
             : this(new HashDictionary())
         {
+
         }
 
         private HashDictionary _hashData;
@@ -171,7 +174,7 @@ namespace NbPilot.Common
 
         #endregion
         
-        #region ShouldInclude
+        #region Includes & Init
 
         private bool _includePropertiesInited = false;
         private List<string> _includeProperties = new List<string>() { "*" };
@@ -192,6 +195,16 @@ namespace NbPilot.Common
             _hashData = new HashDictionary();
         }
 
+        //保证属性会被初始化后使用（序列化等场景）
+        private void GuardInit()
+        {
+            if (!_includePropertiesInited)
+            {
+                var includes = TryParseIncludePropertiesFromQueryString(null);
+                InitIncludeProperties(includes);
+            }
+        }
+
         /// <summary>
         /// 获取当前应该包含的项
         /// </summary>
@@ -208,15 +221,18 @@ namespace NbPilot.Common
         /// <returns></returns>
         internal bool ShouldInclude(string name)
         {
+            //保证被初始化
+            GuardInit();
+
             if (string.IsNullOrWhiteSpace(name))
             {
                 return false;
             }
-
             if (HashDictionary.HashValuesKey.NbEquals(name) || HashDictionary.VersionsKey.NbEquals(name))
             {
                 return true;
             }
+
 
             if (_includeProperties == null || _includeProperties.Count == 0)
             {
@@ -228,6 +244,56 @@ namespace NbPilot.Common
             }
             var isInclude = _includeProperties.Contains(name, StringComparer.OrdinalIgnoreCase);
             return isInclude;
+        }
+
+
+        internal static string ODataSelectKey = "$select";
+        internal static string[] TryParseIncludePropertiesFromQueryString(string queryString = null)
+        {
+            NameValueCollection parameters = null;
+            if (string.IsNullOrWhiteSpace(queryString))
+            {
+                var httpContext = HttpContext.Current;
+                if (httpContext == null)
+                {
+                    //throw new InvalidOperationException("must provide a queryString to parse when HttpContext.Current is null");
+                    //hack for unit test & thers(json serialize...)
+                    return new[] {"*"};
+                }
+
+                //hack for post data
+                if ("POST".NbEquals(httpContext.Request.HttpMethod))
+                {
+                    return new[] { "*" };
+                }
+                parameters = HttpContext.Current.Request.QueryString;
+            }
+            else
+            {
+                parameters = HttpUtility.ParseQueryString(queryString);
+            }
+
+            //should adapted to ODataQueryParser, todo
+            var includes = new List<string>();
+            try
+            {
+                var selectString = parameters[ODataSelectKey];
+                // 如果没有，是否应该是 *
+                if (!string.IsNullOrEmpty(selectString))
+                {
+                    var selectParts = selectString.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                        .Where(s => !s.Contains(".")) //二级属性的处理 X.Y, todo
+                        .ToList();
+
+                    selectParts.ForEach(part => includes.Add(part));
+                }
+            }
+            catch (Exception ex)
+            {
+                //todo log
+                //throw ex;
+            }
+            return includes.ToArray();
         }
 
         #endregion
@@ -244,6 +310,17 @@ namespace NbPilot.Common
             var result = new DynamicHashDictionary();
             result.InitIncludeProperties(includeProperties);
             return result;
+        }
+
+        /// <summary>
+        /// Create From ODataQueryString ($Select=Id,Name,...)
+        /// </summary>
+        /// <param name="queryString"></param>
+        /// <returns></returns>
+        public static DynamicHashDictionary CreateFromODataQueryString(string queryString)
+        {
+            var includes = TryParseIncludePropertiesFromQueryString(queryString);
+            return Init(includes);
         }
 
         #endregion

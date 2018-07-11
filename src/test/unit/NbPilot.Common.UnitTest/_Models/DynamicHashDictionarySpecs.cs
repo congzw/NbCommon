@@ -20,7 +20,6 @@ namespace NbPilot.Common
         public void MyTestInitialize()
         {
             _dynamicHashModel = new DynamicHashDictionary();
-            _dynamicHashModel.InitIncludeProperties("*");
 
             var dynamicHashModel = _dynamicHashModel.AsDynamic();
 
@@ -89,6 +88,9 @@ namespace NbPilot.Common
         {
             var nbJsonSerialize = ResolveSerialize();
 
+            var includeProperties = _dynamicHashModel.GetIncludeProperties();
+            includeProperties.Log();
+
             var dynamicHashModel = _dynamicHashModel.AsDynamic();
 
             var httpGetJson = (string)nbJsonSerialize.Serialize(dynamicHashModel);
@@ -118,12 +120,35 @@ namespace NbPilot.Common
         }
 
         [TestMethod]
+        public void IncludeProperties_Twice_Should_Ex()
+        {
+            AssertHelper.ShouldThrows<InvalidOperationException>(() =>
+            {
+                _dynamicHashModel = DynamicHashDictionary.Init("Foo", "BAR");
+                _dynamicHashModel.InitIncludeProperties("*");
+            });
+        }
+
+        [TestMethod]
         public void SetterAndGetter_ByInit_Should_OK()
         {
             var nbJsonSerialize = ResolveSerialize();
 
             _dynamicHashModel = DynamicHashDictionary.Init("Foo", "BAR");
+            CheckInitIncludeProperties(nbJsonSerialize);
+        }
+        
+        
+        [TestMethod]
+        public void SetterAndGetter_ByODataQueryInit_Should_OK()
+        {
+            _dynamicHashModel = DynamicHashDictionary.CreateFromODataQueryString("$Select=Foo,Bar");
+            var nbJsonSerialize = ResolveSerialize();
+            CheckInitIncludeProperties(nbJsonSerialize);
+        }
 
+        private void CheckInitIncludeProperties(INbJsonSerialize nbJsonSerialize)
+        {
             var includeProperties = _dynamicHashModel.GetIncludeProperties();
             includeProperties.Log();
             includeProperties.Count.ShouldEqual(2);
@@ -145,16 +170,6 @@ namespace NbPilot.Common
             ((object)dynamicHashModel.Foo).ShouldEqual("FOO");
             ((object)dynamicHashModel.Bar).ShouldEqual("BAR");
             ((object)dynamicHashModel.Blah).ShouldNull("Blah");
-        }
-        
-        [TestMethod]
-        public void IncludeProperties_Twice_Should_Ex()
-        {
-            AssertHelper.ShouldThrows<InvalidOperationException>(() =>
-            {
-                _dynamicHashModel = DynamicHashDictionary.Init("Foo", "BAR");
-                _dynamicHashModel.InitIncludeProperties("*");
-            });
         }
     }
 }
