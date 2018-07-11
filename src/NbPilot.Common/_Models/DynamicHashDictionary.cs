@@ -13,12 +13,30 @@ namespace NbPilot.Common
     /// </summary>
     public class DynamicHashDictionary : DynamicObject
     {
+        /// <summary>
+        /// DynamicHashDictionary
+        /// </summary>
         public DynamicHashDictionary()
             : this(new HashDictionary())
         {
         }
 
         private HashDictionary _hashData;
+        /// <summary>
+        /// DynamicHashDictionary Data Holder
+        /// </summary>
+        public HashDictionary DynamicHashData
+        {
+            get
+            {
+                return _hashData;
+            }
+        }
+
+        /// <summary>
+        /// DynamicHashDictionary
+        /// </summary>
+        /// <param name="hashData"></param>
         public DynamicHashDictionary(HashDictionary hashData)
         {
             if (hashData == null)
@@ -28,13 +46,6 @@ namespace NbPilot.Common
             _hashData = hashData;
         }
 
-        public HashDictionary DynamicHashData
-        {
-            get
-            {
-                return _hashData;
-            }
-        }
         public override IEnumerable<string> GetDynamicMemberNames()
         {
             // Implementing this function improves the debugging experience as it provides the debugger with the list of all
