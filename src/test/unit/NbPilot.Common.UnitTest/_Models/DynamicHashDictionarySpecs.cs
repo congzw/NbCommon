@@ -11,6 +11,11 @@ namespace NbPilot.Common
     {
         private DynamicHashDictionary _dynamicHashModel = null;
 
+        private INbJsonSerialize ResolveSerialize()
+        {
+            return NbJsonSerialize.Resolve();
+        }
+
         [TestInitialize()]
         public void MyTestInitialize()
         {
@@ -31,7 +36,6 @@ namespace NbPilot.Common
             dynamicHashModel.C = mockTraceItemC;
         }
         
-
         [TestCleanup()]
         public void MyTestCleanup()
         {
@@ -83,7 +87,7 @@ namespace NbPilot.Common
         [TestMethod]
         public void CheckChanged_Serialize_Should_OK()
         {
-            var nbJsonSerialize = NbJsonSerialize.Resolve();
+            var nbJsonSerialize = ResolveSerialize();
 
             var dynamicHashModel = _dynamicHashModel.AsDynamic();
 
@@ -116,7 +120,7 @@ namespace NbPilot.Common
         [TestMethod]
         public void SetterAndGetter_ByInit_Should_OK()
         {
-            var nbJsonSerialize = NbJsonSerialize.Resolve();
+            var nbJsonSerialize = ResolveSerialize();
 
             _dynamicHashModel = DynamicHashDictionary.Init("Foo", "BAR");
 
