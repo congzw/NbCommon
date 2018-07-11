@@ -15,6 +15,8 @@ namespace NbPilot.Common
         public void MyTestInitialize()
         {
             _dynamicHashModel = new DynamicHashDictionary();
+            _dynamicHashModel.InitIncludeProperties("*");
+
             var dynamicHashModel = _dynamicHashModel.AsDynamic();
 
             var mockTraceItemA = new MockTraceItem();
@@ -109,6 +111,46 @@ namespace NbPilot.Common
             serverGetVo.CheckChanged("B").ShouldFalse("B NotRest");
             serverGetVo.CheckChanged("C").ShouldFalse("C Rest Same");
             serverGetVo.CheckChanged("D").ShouldTrue("Add NEW D");
+        }
+
+        [TestMethod]
+        public void SetterAndGetter_ByInit_Should_OK()
+        {
+            var nbJsonSerialize = NbJsonSerialize.Resolve();
+
+            _dynamicHashModel = DynamicHashDictionary.Init("Foo", "BAR");
+
+            var includeProperties = _dynamicHashModel.GetIncludeProperties();
+            includeProperties.Log();
+            includeProperties.Count.ShouldEqual(2);
+
+            _dynamicHashModel.Set("Bar", () => "BAR");
+
+            var dynamicHashModel = _dynamicHashModel.AsDynamic();
+            dynamicHashModel.Foo = "FOO";
+            dynamicHashModel.Blah = (Func<string>)(() =>
+            {
+                var message = "Should Not Invoke Here";
+                message.Log();
+                return message;
+            });
+
+            var httpGetJson = (string)nbJsonSerialize.Serialize(dynamicHashModel);
+            httpGetJson.Log();
+
+            ((object)dynamicHashModel.Foo).ShouldEqual("FOO");
+            ((object)dynamicHashModel.Bar).ShouldEqual("BAR");
+            ((object)dynamicHashModel.Blah).ShouldNull("Blah");
+        }
+        
+        [TestMethod]
+        public void IncludeProperties_Twice_Should_Ex()
+        {
+            AssertHelper.ShouldThrows<InvalidOperationException>(() =>
+            {
+                _dynamicHashModel = DynamicHashDictionary.Init("Foo", "BAR");
+                _dynamicHashModel.InitIncludeProperties("*");
+            });
         }
     }
 }
