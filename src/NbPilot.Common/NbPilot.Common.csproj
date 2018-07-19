@@ -68,6 +68,7 @@
     <Compile Include="Internal\AutoResolveAsSingletonHelper.cs" />
     <Compile Include="Internal\TypeActivator.cs" />
     <Compile Include="Registries\INbRegistryService.cs" />
+    <Compile Include="NbConstHolder.cs" />
     <Compile Include="Registries\NbRegistry.cs" />
     <Compile Include="Registries\NbRegistryRepository.cs" />
     <Compile Include="StackTraceLogger.cs">
